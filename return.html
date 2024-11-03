@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Игровое приложение</title>
+    <style>
+        /* Основные стили для оформления */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(180deg, #a3d2f0, #ffffff);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #fff;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+        h2 {
+            color: #004b8d;
+        }
+        
+        #main-menu, #wallet, #games, #partner-program, #support, #admin-panel {
+            display: none;
+            width: 90%;
+            max-width: 400px;
+            background: #82b8e2;
+            padding: 20px;
+            border-radius: 25px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        /* Анимация плавного открытия */
+        .fade-in {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        button {
+            background-color: #48a2d6;
+            color: #ffffff;
+            font-size: 16px;
+            padding: 12px 20px;
+            margin: 8px 0;
+            width: 100%;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #3a8ab8;
+            transform: scale(1.05);
+        }
+
+        /* Навигация в виде плавника */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: #004b8d;
+            padding: 20px;
+            border-bottom-left-radius: 50px;
+            display: flex;
+            justify-content: center;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .navbar h1 {
+            color: #fff;
+            font-size: 24px;
+        }
+
+        /* Пузырьки */
+        .bubble {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: #a3d2f0;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: bubble 5s infinite;
+        }
+
+        .bubble:nth-child(2) { top: 30%; left: 20%; animation-delay: 2s; }
+        .bubble:nth-child(3) { top: 50%; left: 80%; animation-delay: 4s; }
+        .bubble:nth-child(4) { top: 70%; left: 40%; animation-delay: 3s; }
+
+        @keyframes bubble {
+            0% { transform: scale(0.5) translateY(0); }
+            50% { transform: scale(1) translateY(-30px); }
+            100% { transform: scale(0.5) translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Плавник-навигация -->
+    <div class="navbar">
+        <h1>Whale App</h1>
+    </div>
+
+    <!-- Главное меню -->
+    <div id="main-menu" class="fade-in">
+        <h2>Главное меню</h2>
+        <button onclick="showWallet()">Кошелек</button>
+        <button onclick="showGames()">Игры</button>
+        <button onclick="showPartnerProgram()">Партнерская программа</button>
+        <button onclick="showSupport()">Техподдержка</button>
+        <button onclick="showAdminPanel()">Админка</button>
+    </div>
+
+    <!-- Кошелек -->
+    <div id="wallet">
+        <h2>Кошелек</h2>
+        <button onclick="topUp()">Пополнение</button>
+        <button onclick="withdraw()">Вывод</button>
+        <button onclick="goBack()">Назад</button>
+    </div>
+
+    <!-- Игры -->
+    <div id="games">
+        <h2>Игры</h2>
+        <button onclick="playGame('retrokoin')">Ретронкоин</button>
+        <button onclick="playGame('bowling')">Боулинг</button>
+        <button onclick="playGame('red_black_zero')">Красное/Черное/Зеро</button>
+        <button onclick="goBack()">Назад</button>
+    </div>
+
+    <!-- Партнерская программа -->
+    <div id="partner-program">
+        <h2>Партнерская программа</h2>
+        <p>У вас, <span id="referralCount">0</span>, рефералов</p>
+        <p>Ваша ссылка: <span id="referralLink">...</span></p>
+        <button onclick="calculateEarnings()">Мой заработок</button>
+        <button onclick="goBack()">Назад</button>
+    </div>
+
+    <!-- Техподдержка -->
+    <div id="support">
+        <h2>Техподдержка</h2>
+        <p>Сообщите о проблеме или ошибке через наш канал.</p>
+        <button onclick="redirectToSupport()">Техподдержка</button>
+        <button onclick="goBack()">Назад</button>
+    </div>
+
+    <!-- Админка -->
+    <div id="admin-panel">
+        <h2>Админка</h2>
+        <input type="text" id="playerId" placeholder="ID игрока">
+        <button onclick="getPlayerInfo()">Проверить игрока</button>
+        <div id="playerInfo" style="display:none;">
+            <p>Игрок ID: <span id="playerID"></span></p>
+            <p>Баланс: <span id="playerBalance"></span></p>
+            <p>Проиграно денег: <span id="playerLosses"></span></p>
+            <p>Выиграно денег: <span id="playerWins"></span></p>
+        </div>
+        <button onclick="goBack()">Назад</button>
+    </div>
+
+    <!-- Пузырьки для морской атмосферы -->
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+
+    <script>
+        // Скрипты для показа разделов
+        function showWallet() {
+            toggleSection('wallet');
+        }
+
+        function showGames() {
+            toggleSection('games');
+        }
+
+        function showPartnerProgram() {
+            toggleSection('partner-program');
+        }
+
+        function showSupport() {
+            toggleSection('support');
+        }
+
+        function showAdminPanel() {
+            toggleSection('admin-panel');
+        }
+
+        function goBack() {
+            toggleSection('main-menu');
+        }
+
+        function toggleSection(id) {
+            document.querySelectorAll('div[id]').forEach(div => div.style.display = 'none');
+            document.getElementById(id).classList.add('fade-in');
+            document.getElementById(id).style.display = 'block';
+        }
+    </script>
+</body>
+</html>
